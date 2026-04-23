@@ -105,11 +105,24 @@
       <button type="submit" id="btn">Отправить</button>
     </form>
 
-    <div class="success" id="success">✅ Заявка отправлена! Мы свяжемся с вами.</div>
+    <div class="success" id="success">
+      <div>✅ Заявка отправлена! Мы свяжемся с вами.</div>
+      <button type="button" id="again-btn" onclick="resetForm()" style="margin-top:16px;background:#fff;color:#4f8ef7;border:1.5px solid #4f8ef7;">Отправить ещё раз</button>
+    </div>
     <div class="error-msg" id="error">Что-то пошло не так. Попробуйте ещё раз.</div>
   </div>
 
   <script>
+    function resetForm() {
+      document.getElementById('form').reset();
+      document.getElementById('form').style.display = 'block';
+      document.getElementById('success').style.display = 'none';
+      document.getElementById('error').style.display = 'none';
+      const btn = document.getElementById('btn');
+      btn.disabled = false;
+      btn.textContent = 'Отправить';
+    }
+
     document.getElementById('form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btn');
