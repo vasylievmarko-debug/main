@@ -3,155 +3,702 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Заявка</title>
+  <title>LinguaWave — Языковая школа</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:   #e85d26;
+      --accent2:  #f4a24d;
+      --dark:     #161b27;
+      --dark2:    #252d3d;
+      --muted:    #6b7280;
+      --light:    #f7f8fc;
+      --white:    #ffffff;
+      --border:   #e5e7eb;
+      --radius:   14px;
+    }
+
+    html { scroll-behavior: smooth; }
 
     body {
+      font-family: 'Inter', sans-serif;
+      color: var(--dark);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      height: 68px;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-size: 20px; font-weight: 800; letter-spacing: -.5px;
+      color: var(--dark);
+      text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover { color: var(--dark); }
+    .nav-cta {
+      padding: 10px 22px;
+      background: var(--accent);
+      color: var(--white);
+      border: none; border-radius: 8px;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: background .2s;
+    }
+    .nav-cta:hover { background: #cc4e1a; }
+
+    /* ── HERO (screen 1) ── */
+    #hero {
       min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 100px 48px 60px;
+      gap: 60px;
+      background: linear-gradient(135deg, #fff8f4 0%, #fff 60%);
+      position: relative;
+      overflow: hidden;
+    }
+    #hero::before {
+      content: '';
+      position: absolute; top: -100px; right: -100px;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,93,38,.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px;
+      background: #fff3ed;
+      border: 1px solid #fbd5c0;
+      border-radius: 100px;
+      font-size: 13px; font-weight: 600; color: var(--accent);
+      margin-bottom: 24px;
+    }
+    .hero-tag::before { content: '●'; font-size: 8px; }
+    h1 {
+      font-size: clamp(36px, 5vw, 58px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+    h1 em { font-style: normal; color: var(--accent); }
+    .hero-sub {
+      font-size: 17px; color: var(--muted); max-width: 460px;
+      margin-bottom: 36px; line-height: 1.7;
+    }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-primary {
+      padding: 14px 28px;
+      background: var(--accent);
+      color: var(--white);
+      border: none; border-radius: var(--radius);
+      font-size: 15px; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      transition: background .2s, transform .15s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: #cc4e1a; transform: translateY(-1px); }
+    .btn-outline {
+      padding: 14px 28px;
+      background: transparent;
+      color: var(--dark);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 15px; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: border-color .2s, transform .15s;
+      display: inline-block;
+    }
+    .btn-outline:hover { border-color: var(--dark); transform: translateY(-1px); }
+
+    .hero-stats {
+      display: flex; gap: 32px; margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+    .stat-num { font-size: 28px; font-weight: 800; color: var(--dark); }
+    .stat-label { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+    /* hero right — visual card stack */
+    .hero-visual { position: relative; display: flex; justify-content: center; }
+    .hero-card-main {
+      width: 100%; max-width: 380px;
+      background: var(--dark2);
+      border-radius: 24px;
+      padding: 36px 32px;
+      color: var(--white);
+      box-shadow: 0 32px 80px rgba(22,27,39,.25);
+    }
+    .lang-flags { display: flex; gap: 10px; margin-bottom: 20px; }
+    .flag {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      background: rgba(255,255,255,.1);
+    }
+    .hero-card-main h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .hero-card-main p { font-size: 14px; color: rgba(255,255,255,.6); margin-bottom: 24px; }
+    .lang-list { display: flex; flex-direction: column; gap: 10px; }
+    .lang-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px;
+      background: rgba(255,255,255,.07);
+      border-radius: 10px;
+    }
+    .lang-item-left { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; }
+    .lang-badge {
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 11px; font-weight: 600;
+    }
+    .badge-green { background: rgba(52,211,153,.15); color: #34d399; }
+    .badge-blue  { background: rgba(96,165,250,.15); color: #60a5fa; }
+    .badge-orange{ background: rgba(251,146,60,.15); color: #fb923c; }
+
+    .float-badge {
+      position: absolute;
+      background: var(--white);
+      border-radius: 12px;
+      padding: 12px 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.12);
+      font-size: 13px; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .float-badge.top { top: -20px; right: -20px; }
+    .float-badge.bottom { bottom: 30px; left: -30px; }
+    .float-badge .icon { font-size: 20px; }
+
+    /* ── FEATURES (screen 2) ── */
+    #features {
+      min-height: 100vh;
+      padding: 100px 48px;
+      background: var(--light);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .section-tag {
+      display: inline-block;
+      padding: 5px 14px;
+      background: #fff3ed;
+      border-radius: 100px;
+      font-size: 13px; font-weight: 600; color: var(--accent);
+      margin-bottom: 16px;
+    }
+    h2 {
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    h2 em { font-style: normal; color: var(--accent); }
+    .section-sub { font-size: 17px; color: var(--muted); max-width: 520px; margin-bottom: 60px; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .feat-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      border: 1px solid var(--border);
+      transition: box-shadow .2s, transform .2s;
+    }
+    .feat-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,.08); transform: translateY(-3px); }
+    .feat-icon {
+      width: 52px; height: 52px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .feat-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+    .feat-card p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+    .teachers-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .teacher-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--border);
+      display: flex; gap: 16px; align-items: center;
+    }
+    .teacher-avatar {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .teacher-name { font-size: 15px; font-weight: 700; }
+    .teacher-role { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .teacher-langs { display: flex; gap: 6px; margin-top: 8px; }
+    .lang-pill {
+      padding: 2px 8px;
+      background: var(--light);
+      border-radius: 100px;
+      font-size: 11px; font-weight: 600; color: var(--dark2);
+    }
+
+    /* ── FORM (screen 3) ── */
+    #contact {
+      min-height: 100vh;
+      padding: 100px 48px;
+      background: var(--dark);
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #f0f4f8;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      position: relative;
+      overflow: hidden;
     }
-
-    .card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 40px 36px;
+    #contact::before {
+      content: '';
+      position: absolute; top: -200px; left: -200px;
+      width: 700px; height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,93,38,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #contact::after {
+      content: '';
+      position: absolute; bottom: -200px; right: -200px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(244,162,77,.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      max-width: 1000px;
       width: 100%;
-      max-width: 400px;
-      box-shadow: 0 4px 24px rgba(0,0,0,.08);
+      position: relative;
+      z-index: 1;
     }
-
-    h1 {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 28px;
-      color: #1a1a2e;
+    .contact-left h2 { color: var(--white); margin-bottom: 16px; }
+    .contact-left .section-sub { color: rgba(255,255,255,.55); }
+    .contact-perks { display: flex; flex-direction: column; gap: 16px; margin-top: 36px; }
+    .perk {
+      display: flex; gap: 14px; align-items: flex-start;
     }
+    .perk-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(255,255,255,.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0; margin-top: 2px;
+    }
+    .perk-title { font-size: 15px; font-weight: 600; color: var(--white); }
+    .perk-desc  { font-size: 13px; color: rgba(255,255,255,.5); margin-top: 2px; }
 
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: #555;
+    .form-box {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 40px 36px;
+    }
+    .form-box h3 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+    .form-box .form-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block; font-size: 13px; font-weight: 600; color: var(--dark2);
       margin-bottom: 6px;
     }
-
-    input {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1.5px solid #dde1e7;
+    .form-group input,
+    .form-group select {
+      width: 100%; padding: 13px 16px;
+      border: 1.5px solid var(--border);
       border-radius: 10px;
-      font-size: 15px;
-      outline: none;
+      font-size: 15px; font-family: inherit;
+      outline: none; color: var(--dark);
       transition: border-color .2s;
-      margin-bottom: 18px;
+      background: var(--white);
+      appearance: none;
     }
+    .form-group input:focus,
+    .form-group select:focus { border-color: var(--accent); }
+    .form-group input::placeholder { color: #b0b7c3; }
 
-    input:focus { border-color: #4f8ef7; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-    button {
+    .submit-btn {
       width: 100%;
-      padding: 13px;
-      background: #4f8ef7;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
+      padding: 15px;
+      background: var(--accent);
+      color: var(--white);
+      border: none; border-radius: 10px;
+      font-size: 16px; font-weight: 700;
       cursor: pointer;
-      transition: background .2s, opacity .2s;
+      transition: background .2s, transform .15s;
+      margin-top: 8px;
+    }
+    .submit-btn:hover { background: #cc4e1a; transform: translateY(-1px); }
+    .submit-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    .form-note {
+      text-align: center; font-size: 12px; color: var(--muted);
+      margin-top: 14px;
     }
 
-    button:hover { background: #3a7de0; }
-    button:disabled { opacity: .6; cursor: not-allowed; }
-
-    .success {
+    /* success state */
+    .success-state {
       display: none;
-      margin-top: 20px;
-      padding: 14px 16px;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .success-circle {
+      width: 72px; height: 72px;
       background: #edfbf3;
-      border: 1.5px solid #5ecb8f;
-      border-radius: 10px;
-      color: #237a4b;
-      font-size: 15px;
-      font-weight: 500;
-      text-align: center;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 20px;
     }
+    .success-state h3 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+    .success-state p { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+    .again-btn {
+      padding: 12px 28px;
+      background: transparent;
+      color: var(--accent);
+      border: 1.5px solid var(--accent);
+      border-radius: 10px;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .again-btn:hover { background: var(--accent); color: var(--white); }
 
-    .error-msg {
-      display: none;
-      margin-top: 12px;
-      color: #d93025;
-      font-size: 13px;
-      text-align: center;
+    /* ── FOOTER ── */
+    footer {
+      background: #0f1219;
+      padding: 28px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-logo { font-size: 16px; font-weight: 800; color: var(--white); }
+    .footer-logo span { color: var(--accent); }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,.35); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      #hero { grid-template-columns: 1fr; padding: 100px 20px 60px; }
+      .hero-visual { display: none; }
+      #features { padding: 80px 20px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .teachers-row { grid-template-columns: 1fr; }
+      #contact { padding: 80px 20px; }
+      .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+      footer { flex-direction: column; gap: 8px; text-align: center; padding: 20px; }
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Оставить заявку</h1>
 
-    <form id="form">
-      <label for="name">Имя</label>
-      <input id="name" type="text" placeholder="Иван Иванов" required />
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">Lingua<span>Wave</span></a>
+  <ul class="nav-links">
+    <li><a href="#hero">Главная</a></li>
+    <li><a href="#features">Курсы</a></li>
+    <li><a href="#contact">Контакты</a></li>
+  </ul>
+  <a class="nav-cta" href="#contact">Записаться</a>
+</nav>
 
-      <label for="phone">Телефон</label>
-      <input id="phone" type="tel" placeholder="+7 999 000 00 00" required />
-
-      <button type="submit" id="btn">Отправить</button>
-    </form>
-
-    <div class="success" id="success">
-      <div>✅ Заявка отправлена! Мы свяжемся с вами.</div>
-      <button type="button" id="again-btn" onclick="resetForm()" style="margin-top:16px;background:#fff;color:#4f8ef7;border:1.5px solid #4f8ef7;">Отправить ещё раз</button>
+<!-- SCREEN 1: HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Языковая школа нового поколения</div>
+    <h1>Говори на<br><em>любом языке</em><br>уже через 3 месяца</h1>
+    <p class="hero-sub">Индивидуальные и групповые занятия с носителями языка онлайн и офлайн. Испанский, английский, немецкий, французский.</p>
+    <div class="hero-btns">
+      <a class="btn-primary" href="#contact">Начать бесплатно</a>
+      <a class="btn-outline" href="#features">Узнать больше</a>
     </div>
-    <div class="error-msg" id="error">Что-то пошло не так. Попробуйте ещё раз.</div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">2 400+</div>
+        <div class="stat-label">Студентов</div>
+      </div>
+      <div>
+        <div class="stat-num">98%</div>
+        <div class="stat-label">Довольны результатом</div>
+      </div>
+      <div>
+        <div class="stat-num">7 лет</div>
+        <div class="stat-label">На рынке</div>
+      </div>
+    </div>
   </div>
 
-  <script>
-    function resetForm() {
-      document.getElementById('form').reset();
-      document.getElementById('form').style.display = 'block';
-      document.getElementById('success').style.display = 'none';
-      document.getElementById('error').style.display = 'none';
-      const btn = document.getElementById('btn');
-      btn.disabled = false;
-      btn.textContent = 'Отправить';
-    }
+  <div class="hero-visual">
+    <div style="position:relative; width:380px;">
+      <div class="hero-card-main">
+        <div class="lang-flags">
+          <div class="flag">🇪🇸</div>
+          <div class="flag">🇬🇧</div>
+          <div class="flag">🇩🇪</div>
+          <div class="flag">🇫🇷</div>
+        </div>
+        <h3>Популярные курсы</h3>
+        <p>Выбери свой язык и уровень</p>
+        <div class="lang-list">
+          <div class="lang-item">
+            <div class="lang-item-left">🇪🇸 Испанский</div>
+            <span class="lang-badge badge-green">Хит</span>
+          </div>
+          <div class="lang-item">
+            <div class="lang-item-left">🇬🇧 Английский</div>
+            <span class="lang-badge badge-blue">Популярный</span>
+          </div>
+          <div class="lang-item">
+            <div class="lang-item-left">🇩🇪 Немецкий</div>
+            <span class="lang-badge badge-orange">Новый</span>
+          </div>
+          <div class="lang-item">
+            <div class="lang-item-left">🇫🇷 Французский</div>
+            <span class="lang-badge badge-blue">Популярный</span>
+          </div>
+        </div>
+      </div>
+      <div class="float-badge top">
+        <span class="icon">⭐</span>
+        <div>
+          <div style="font-size:13px;font-weight:700;">4.9 / 5.0</div>
+          <div style="font-size:11px;color:#6b7280;">347 отзывов</div>
+        </div>
+      </div>
+      <div class="float-badge bottom">
+        <span class="icon">🎯</span>
+        <div>
+          <div style="font-size:13px;font-weight:700;">Пробный урок</div>
+          <div style="font-size:11px;color:#6b7280;">Бесплатно</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    document.getElementById('form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const btn = document.getElementById('btn');
-      btn.disabled = true;
-      btn.textContent = 'Отправляем…';
+<!-- SCREEN 2: FEATURES -->
+<section id="features">
+  <div>
+    <span class="section-tag">Почему LinguaWave</span>
+    <h2>Всё что нужно для<br><em>быстрого результата</em></h2>
+    <p class="section-sub">Мы объединили лучшие методики обучения языкам и сделали процесс максимально удобным.</p>
+  </div>
 
-      const name  = document.getElementById('name').value.trim();
-      const phone = document.getElementById('phone').value.trim();
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#fff3ed;">🎙️</div>
+      <h3>Носители языка</h3>
+      <p>Все преподаватели — сертифицированные носители языка с опытом преподавания от 5 лет.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#eef2ff;">📅</div>
+      <h3>Гибкое расписание</h3>
+      <p>Занятия утром, днём и вечером. Онлайн и офлайн. Легко совмещать с работой и учёбой.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#f0fdf4;">🚀</div>
+      <h3>Быстрый прогресс</h3>
+      <p>Авторская программа позволяет достичь уровня B1 за 3–4 месяца интенсивных занятий.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#fdf4ff;">📊</div>
+      <h3>Трекинг прогресса</h3>
+      <p>Личный кабинет с отчётами об успеваемости, домашними заданиями и записями уроков.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#fff8ed;">💬</div>
+      <h3>Разговорные клубы</h3>
+      <p>Еженедельные клубы общения с другими студентами и носителями — отличная практика вживую.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#f0f9ff;">🎓</div>
+      <h3>Сертификат</h3>
+      <p>По окончании курса выдаём международный сертификат, который признаётся работодателями.</p>
+    </div>
+  </div>
 
-      try {
-        const res = await fetch('/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, phone }),
-        });
-        const data = await res.json();
+  <div class="teachers-row">
+    <div class="teacher-card">
+      <div class="teacher-avatar">👩‍🏫</div>
+      <div>
+        <div class="teacher-name">Мария Лопес</div>
+        <div class="teacher-role">Преподаватель испанского</div>
+        <div class="teacher-langs">
+          <span class="lang-pill">🇪🇸 Носитель</span>
+          <span class="lang-pill">10 лет опыта</span>
+        </div>
+      </div>
+    </div>
+    <div class="teacher-card">
+      <div class="teacher-avatar">👨‍🏫</div>
+      <div>
+        <div class="teacher-name">Джеймс Харрис</div>
+        <div class="teacher-role">Преподаватель английского</div>
+        <div class="teacher-langs">
+          <span class="lang-pill">🇬🇧 Носитель</span>
+          <span class="lang-pill">8 лет опыта</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        if (data.ok) {
-          document.getElementById('form').style.display = 'none';
-          document.getElementById('success').style.display = 'block';
-        } else {
-          throw new Error(data.error);
-        }
-      } catch {
-        document.getElementById('error').style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Отправить';
+<!-- SCREEN 3: CONTACT FORM -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-left">
+      <span class="section-tag">Запись на курс</span>
+      <h2>Начни говорить<br><em>уже сегодня</em></h2>
+      <p class="section-sub">Оставь заявку — мы свяжемся в течение 15 минут и подберём удобное время для пробного урока.</p>
+      <div class="contact-perks">
+        <div class="perk">
+          <div class="perk-icon">🎁</div>
+          <div>
+            <div class="perk-title">Первый урок бесплатно</div>
+            <div class="perk-desc">Без обязательств — познакомьтесь с преподавателем и методикой.</div>
+          </div>
+        </div>
+        <div class="perk">
+          <div class="perk-icon">⚡</div>
+          <div>
+            <div class="perk-title">Ответим за 15 минут</div>
+            <div class="perk-desc">Наш менеджер свяжется с вами сразу после заявки.</div>
+          </div>
+        </div>
+        <div class="perk">
+          <div class="perk-icon">🔒</div>
+          <div>
+            <div class="perk-title">Без спама</div>
+            <div class="perk-desc">Ваши данные в безопасности и не передаются третьим лицам.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-box">
+      <!-- FORM STATE -->
+      <div id="form-state">
+        <h3>Записаться на урок</h3>
+        <p class="form-sub">Заполните форму — это займёт меньше минуты</p>
+        <form id="lead-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fname">Имя</label>
+              <input id="fname" type="text" placeholder="Иван" required />
+            </div>
+            <div class="form-group">
+              <label for="phone">Телефон</label>
+              <input id="phone" type="tel" placeholder="+7 999 000 00 00" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lang">Язык</label>
+            <select id="lang">
+              <option value="">Выберите язык</option>
+              <option>🇪🇸 Испанский</option>
+              <option>🇬🇧 Английский</option>
+              <option>🇩🇪 Немецкий</option>
+              <option>🇫🇷 Французский</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="level">Уровень</label>
+            <select id="level">
+              <option value="">Ваш текущий уровень</option>
+              <option>С нуля (A0)</option>
+              <option>Начальный (A1–A2)</option>
+              <option>Средний (B1–B2)</option>
+              <option>Продвинутый (C1–C2)</option>
+            </select>
+          </div>
+          <button class="submit-btn" type="submit" id="submit-btn">Записаться на бесплатный урок →</button>
+          <p class="form-note">Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности</p>
+        </form>
+      </div>
+
+      <!-- SUCCESS STATE -->
+      <div class="success-state" id="success-state">
+        <div class="success-circle">✅</div>
+        <h3>Заявка отправлена!</h3>
+        <p>Мы свяжемся с вами в течение 15 минут для подтверждения пробного урока.</p>
+        <button class="again-btn" onclick="resetForm()">Отправить ещё раз</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Lingua<span>Wave</span></div>
+  <div class="footer-copy">© 2025 LinguaWave. Все права защищены.</div>
+</footer>
+
+<script>
+  document.getElementById('lead-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Отправляем…';
+
+    const name  = document.getElementById('fname').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const lang  = document.getElementById('lang').value;
+    const level = document.getElementById('level').value;
+
+    try {
+      const res = await fetch('/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, phone, lang, level }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        document.getElementById('form-state').style.display = 'none';
+        document.getElementById('success-state').style.display = 'block';
+      } else {
+        throw new Error(data.error);
       }
-    });
-  </script>
+    } catch {
+      btn.disabled = false;
+      btn.textContent = 'Записаться на бесплатный урок →';
+      alert('Что-то пошло не так. Попробуйте ещё раз.');
+    }
+  });
+
+  function resetForm() {
+    document.getElementById('lead-form').reset();
+    document.getElementById('submit-btn').disabled = false;
+    document.getElementById('submit-btn').textContent = 'Записаться на бесплатный урок →';
+    document.getElementById('form-state').style.display = 'block';
+    document.getElementById('success-state').style.display = 'none';
+  }
+</script>
 </body>
 </html>

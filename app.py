@@ -12,14 +12,14 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
 
 
-def send_telegram_notification(name: str, phone: str) -> None:
-    text = (
-        "📬 Новая заявка с сайта!\n\n"
-        f"👤 Имя: {name}\n"
-        f"📞 Телефон: {phone}"
-    )
+def send_telegram_notification(name: str, phone: str, lang: str = "", level: str = "") -> None:
+    lines = ["📬 Новая заявка с сайта!\n", f"👤 Имя: {name}", f"📞 Телефон: {phone}"]
+    if lang:
+        lines.append(f"🌍 Язык: {lang}")
+    if level:
+        lines.append(f"📊 Уровень: {level}")
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    httpx.post(url, json={"chat_id": CHAT_ID, "text": text}, timeout=10)
+    httpx.post(url, json={"chat_id": CHAT_ID, "text": "\n".join(lines)}, timeout=10)
 
 
 @app.route("/")
@@ -30,13 +30,15 @@ def index():
 @app.route("/submit", methods=["POST"])
 def submit():
     data = request.get_json()
-    name = (data.get("name") or "").strip()
+    name  = (data.get("name") or "").strip()
     phone = (data.get("phone") or "").strip()
+    lang  = (data.get("lang") or "").strip()
+    level = (data.get("level") or "").strip()
 
     if not name or not phone:
         return jsonify({"ok": False, "error": "Заполните все поля"}), 400
 
-    send_telegram_notification(name, phone)
+    send_telegram_notification(name, phone, lang, level)
     return jsonify({"ok": True})
 
 
